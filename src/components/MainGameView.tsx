@@ -28,6 +28,8 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
     nextRole,
     seniority,
     roleProgressPercent,
+    canPromote,
+    requiredRoleTasks,
     maxConcurrentTasks,
     clickPower,
     autoClickPower,
@@ -52,8 +54,6 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
     sound.playDuckQuack();
     setDuckBounces((prev) => prev + 1);
   };
-
-  const canPromote = nextRole && state.roleXP >= currentRole.unlockXP;
 
   return (
     <div className="space-y-6 pb-12">
@@ -89,7 +89,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
       )}
 
       {/* Promotion Available Banner */}
-      {canPromote && (
+      {canPromote && nextRole && (
         <div className="rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-emerald-500/20 p-4 shadow-xl shadow-amber-500/10 backdrop-blur-md flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-amber-400 text-slate-950 font-black">
@@ -100,7 +100,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                 ¡ASCENSO PROFESIONAL DISPONIBLE!
               </h3>
               <p className="text-xs text-slate-300">
-                Alcanzaste los {currentRole.unlockXP.toLocaleString()} XP necesarios para ascender a <strong className="text-amber-200">{nextRole.title}</strong>.
+                Completaste las {requiredRoleTasks} tareas y alcanzaste los {currentRole.unlockXP.toLocaleString()} XP para ascender a <strong className="text-amber-200">{nextRole.title}</strong>.
               </p>
             </div>
           </div>
@@ -116,12 +116,12 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
       )}
 
       {/* Career Progress Mini Tracker */}
-      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4.5 backdrop-blur-md shadow-md">
-        <div className="flex items-center justify-between text-sm font-bold mb-2.5">
+      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4.5 backdrop-blur-md shadow-md space-y-3">
+        <div className="flex items-center justify-between text-sm font-bold flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="text-slate-200">Progreso del Rol ({currentRole.title}):</span>
-            <span className="text-cyan-400 font-mono font-extrabold">
-              {Math.floor(state.roleXP).toLocaleString()} / {currentRole.unlockXP.toLocaleString()} XP
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              Rango: {seniority}
             </span>
           </div>
           <button
@@ -132,11 +132,42 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
             <ArrowUpRight className="w-4 h-4" />
           </button>
         </div>
-        <div className="w-full h-3.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 transition-all duration-500"
-            style={{ width: `${roleProgressPercent}%` }}
-          />
+
+        {/* Dual Progress Bars: XP & Tasks */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div>
+            <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+              <span>Experiencia (XP):</span>
+              <span className="text-cyan-400 font-bold">
+                {Math.floor(state.roleXP).toLocaleString()} / {currentRole.unlockXP.toLocaleString()} XP
+              </span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
+                style={{
+                  width: `${Math.min(100, Math.floor((state.roleXP / currentRole.unlockXP) * 100))}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+              <span>Tareas del Rol:</span>
+              <span className="text-emerald-400 font-bold">
+                {state.roleTasksCompleted || 0} / {requiredRoleTasks} tareas
+              </span>
+            </div>
+            <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
+                style={{
+                  width: `${Math.min(100, Math.floor(((state.roleTasksCompleted || 0) / requiredRoleTasks) * 100))}%`,
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
 

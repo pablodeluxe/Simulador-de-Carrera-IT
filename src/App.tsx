@@ -29,9 +29,7 @@ function GameDashboard() {
   const [showAchievements, setShowAchievements] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const { state, currentRole, nextRole } = useGame();
-
-  const canPromote = nextRole && state.roleXP >= currentRole.unlockXP;
+  const { state, currentRole, nextRole, canPromote } = useGame();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-slate-950">

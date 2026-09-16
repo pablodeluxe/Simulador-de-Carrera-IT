@@ -5,6 +5,7 @@ const STORAGE_KEY = 'carrera_it_game_state_v1';
 export const INITIAL_GAME_STATE: GameState = {
   currentRoleId: 1, // Start as Técnico Informático
   roleXP: 0,
+  roleTasksCompleted: 0,
   totalXP: 0,
   salary: 150, // Initial pocket money
   scrap: 10, // Initial spare parts
@@ -51,6 +52,9 @@ export function loadGameState(): { state: GameState; offlineSeconds: number } {
     const state: GameState = {
       ...INITIAL_GAME_STATE,
       ...parsed,
+      roleTasksCompleted: typeof parsed.roleTasksCompleted === 'number'
+        ? parsed.roleTasksCompleted
+        : Math.min(50, parsed.stats?.totalTasksCompleted || 0),
       stats: {
         ...INITIAL_GAME_STATE.stats,
         ...(parsed.stats || {}),

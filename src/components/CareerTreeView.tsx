@@ -19,10 +19,10 @@ export const CareerTreeView: React.FC = () => {
     nextRole,
     seniority,
     roleProgressPercent,
+    canPromote,
+    requiredRoleTasks,
     promoteRole,
   } = useGame();
-
-  const canPromote = nextRole && state.roleXP >= currentRole.unlockXP;
 
   return (
     <div className="space-y-6 pb-12">
@@ -44,11 +44,11 @@ export const CareerTreeView: React.FC = () => {
               De Técnico Junior a Arquitecto Gurú
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
-              Gana Experiencia (XP) completando tareas para ascender por la escala corporativa. Cada rol incrementa tus ingresos pasivos y desbloquea tareas más complejas.
+              Completa tareas y acumula Experiencia (XP) para ascender de rol. Cada rol requiere al menos 50 tareas finalizadas para forjar tu experiencia laboral.
             </p>
           </div>
 
-          {canPromote ? (
+          {canPromote && nextRole ? (
             <button
               onClick={promoteRole}
               className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-emerald-400 px-6 py-3 text-sm font-black text-slate-950 hover:from-amber-300 hover:to-emerald-300 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer animate-bounce"
@@ -57,10 +57,15 @@ export const CareerTreeView: React.FC = () => {
               <span>¡ASCENDER AHORA A {nextRole.title.toUpperCase()}!</span>
             </button>
           ) : (
-            <div className="text-right">
-              <div className="text-xs text-slate-400 font-semibold">Progreso para próximo ascenso</div>
-              <div className="text-base font-mono font-bold text-cyan-400">
-                {Math.floor(state.roleXP).toLocaleString()} / {currentRole.unlockXP.toLocaleString()} XP
+            <div className="text-right space-y-1">
+              <div className="text-xs text-slate-400 font-semibold">Requisitos de ascenso:</div>
+              <div className="flex flex-col items-end gap-0.5 text-xs font-mono">
+                <span className={state.roleXP >= currentRole.unlockXP ? 'text-emerald-400 font-bold' : 'text-cyan-400 font-bold'}>
+                  XP: {Math.floor(state.roleXP).toLocaleString()} / {currentRole.unlockXP.toLocaleString()}
+                </span>
+                <span className={(state.roleTasksCompleted || 0) >= requiredRoleTasks ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                  Tareas: {state.roleTasksCompleted || 0} / {requiredRoleTasks}
+                </span>
               </div>
             </div>
           )}
@@ -78,15 +83,15 @@ export const CareerTreeView: React.FC = () => {
         <div className="grid grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-slate-800/80 text-center">
           <div className={`p-2.5 rounded-xl border ${seniority === 'Junior' ? 'bg-sky-500/20 border-sky-400 text-sky-300' : 'bg-slate-950/50 border-slate-800 text-slate-400'}`}>
             <div className="text-xs sm:text-sm font-bold">1. Junior</div>
-            <div className="text-xs text-slate-400">0% - 33% XP</div>
+            <div className="text-xs text-slate-400">0 - 16 tareas del rol</div>
           </div>
           <div className={`p-2.5 rounded-xl border ${seniority === 'Semi-Senior' ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-slate-950/50 border-slate-800 text-slate-400'}`}>
             <div className="text-xs sm:text-sm font-bold">2. Semi-Senior</div>
-            <div className="text-xs text-slate-400">33% - 66% XP (Desbloquea tareas avanzadas)</div>
+            <div className="text-xs text-slate-400">17 - 33 tareas (Nivel medio)</div>
           </div>
           <div className={`p-2.5 rounded-xl border ${seniority === 'Senior' ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300' : 'bg-slate-950/50 border-slate-800 text-slate-400'}`}>
             <div className="text-xs sm:text-sm font-bold">3. Senior</div>
-            <div className="text-xs text-slate-400">66% - 100% XP (Listo para ascenso)</div>
+            <div className="text-xs text-slate-400">34 - 50 tareas (Listo para ascender)</div>
           </div>
         </div>
       </div>
@@ -157,8 +162,9 @@ export const CareerTreeView: React.FC = () => {
                     <DollarSign className="w-4 h-4" />
                     <span>${role.minSalary.toLocaleString()} - ${role.maxSalary.toLocaleString()}</span>
                   </div>
-                  <div className="text-xs font-mono text-slate-300">
-                    Desbloqueo: <strong className="text-cyan-300">{role.unlockXP.toLocaleString()} XP</strong>
+                  <div className="text-xs font-mono text-slate-300 text-right">
+                    <div>Desbloqueo: <strong className="text-cyan-300">{role.unlockXP.toLocaleString()} XP</strong></div>
+                    <div className="text-[11px] text-slate-400 font-sans mt-0.5">50 tareas del rol previo</div>
                   </div>
                 </div>
               </div>

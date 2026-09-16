@@ -35,6 +35,7 @@ export interface RoleDefinition {
   minSalary: number;
   maxSalary: number;
   unlockXP: number;
+  requiredTasks?: number; // Minimum tasks in this role to qualify for promotion (default 50)
   color: string;
   tasks: TaskDefinition[];
   lore: string[];
@@ -126,6 +127,7 @@ export interface GameStats {
 export interface GameState {
   currentRoleId: number;
   roleXP: number;
+  roleTasksCompleted: number; // Tasks completed in current role (need 50 for promotion)
   totalXP: number;
   salary: number;
   scrap: number;

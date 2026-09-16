@@ -126,10 +126,10 @@ export const SHOP_UPGRADES: ShopUpgrade[] = [
     cost: 150,
     currency: 'salary',
     level: 0,
-    maxLevel: 10,
-    costMultiplier: 1.8,
-    effectDescription: '+20% de Experiencia (XP) en todas las tareas',
-    xpMultiplier: 0.20
+    maxLevel: 5,
+    costMultiplier: 2.0,
+    effectDescription: '+8% de Experiencia (XP) en tareas por nivel',
+    xpMultiplier: 0.08
   },
   {
     id: 'pet-cat',
@@ -186,8 +186,8 @@ export const SHOP_UPGRADES: ShopUpgrade[] = [
     level: 0,
     maxLevel: 5,
     costMultiplier: 2.2,
-    effectDescription: '+35% multiplicador permanente de XP',
-    xpMultiplier: 0.35
+    effectDescription: '+10% multiplicador de XP en tareas por nivel',
+    xpMultiplier: 0.10
   },
   {
     id: 'course-cloud',

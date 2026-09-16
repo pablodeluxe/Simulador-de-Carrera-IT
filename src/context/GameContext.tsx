@@ -21,6 +21,8 @@ interface GameContextType {
   nextRole?: RoleDefinition;
   seniority: SeniorityLevel;
   roleProgressPercent: number;
+  canPromote: boolean;
+  requiredRoleTasks: number;
   maxSanity: number;
   sanityRegenPerSec: number;
   maxConcurrentTasks: number;
@@ -80,17 +82,32 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return ROLES_DATA.find((r) => r.id === state.currentRoleId + 1);
   }, [state.currentRoleId]);
 
-  // Seniority based on roleXP vs unlockXP
+  const requiredRoleTasks = currentRole.requiredTasks || 50;
+
+  // Seniority based on both roleXP and completed tasks in this role
+  // Requires at least ~17 tasks (33%) for Semi-Senior and ~34 tasks (66%) for Senior
   const seniority: SeniorityLevel = useMemo(() => {
-    const ratio = state.roleXP / currentRole.unlockXP;
-    if (ratio >= 0.66) return 'Senior';
-    if (ratio >= 0.33) return 'Semi-Senior';
+    const xpRatio = state.roleXP / currentRole.unlockXP;
+    const taskRatio = (state.roleTasksCompleted || 0) / requiredRoleTasks;
+    if (xpRatio >= 0.66 && taskRatio >= 0.66) return 'Senior';
+    if (xpRatio >= 0.33 && taskRatio >= 0.33) return 'Semi-Senior';
     return 'Junior';
-  }, [state.roleXP, currentRole.unlockXP]);
+  }, [state.roleXP, state.roleTasksCompleted, currentRole.unlockXP, requiredRoleTasks]);
+
+  const canPromote = useMemo(() => {
+    return Boolean(
+      nextRole &&
+      state.roleXP >= currentRole.unlockXP &&
+      (state.roleTasksCompleted || 0) >= requiredRoleTasks
+    );
+  }, [nextRole, state.roleXP, state.roleTasksCompleted, currentRole.unlockXP, requiredRoleTasks]);
 
   const roleProgressPercent = useMemo(() => {
-    return Math.min(100, Math.floor((state.roleXP / currentRole.unlockXP) * 100));
-  }, [state.roleXP, currentRole.unlockXP]);
+    const xpRatio = Math.min(1, state.roleXP / currentRole.unlockXP);
+    const taskRatio = Math.min(1, (state.roleTasksCompleted || 0) / requiredRoleTasks);
+    // Average progress between XP goal and tasks goal
+    return Math.min(100, Math.floor(((xpRatio + taskRatio) / 2) * 100));
+  }, [state.roleXP, state.roleTasksCompleted, currentRole.unlockXP, requiredRoleTasks]);
 
   // Calculate Upgrades Modifiers
   const {
@@ -163,7 +180,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (ach.id === 'ach-role-helpdesk' && currentState.currentRoleId >= 2) qualify = true;
       if (ach.id === 'ach-role-dev' && currentState.currentRoleId >= 6) qualify = true;
       if (ach.id === 'ach-scrap-collector' && currentState.stats.totalScrapCollected >= 100) qualify = true;
-      if (ach.id === 'ach-senior-rank' && (currentState.roleXP / (ROLES_DATA.find(r => r.id === currentState.currentRoleId)?.unlockXP || 1000) >= 0.66)) qualify = true;
+      if (
+        ach.id === 'ach-senior-rank' &&
+        (currentState.roleXP / (ROLES_DATA.find((r) => r.id === currentState.currentRoleId)?.unlockXP || 1000) >= 0.66) &&
+        (currentState.roleTasksCompleted || 0) >= 33
+      ) qualify = true;
       if (ach.id === 'ach-architect-guru' && currentState.currentRoleId === 10) qualify = true;
       if (ach.id === 'ach-keyboard-warrior' && currentState.stats.totalClicks >= 100) qualify = true;
       if (
@@ -198,7 +219,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...currentState,
         salary: currentState.salary + bonusSalary,
         totalXP: currentState.totalXP + bonusXP,
-        roleXP: currentState.roleXP + bonusXP,
+        roleXP: currentState.roleXP + Math.min(50, Math.floor(bonusXP * 0.15)),
         unlockedAchievements: [...currentState.unlockedAchievements, ...newlyUnlocked],
       };
     }
@@ -282,6 +303,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const nextState: GameState = {
         ...prev,
         roleXP: prev.roleXP + earnedXP,
+        roleTasksCompleted: (prev.roleTasksCompleted || 0) + 1,
         totalXP: prev.totalXP + earnedXP,
         salary: prev.salary + earnedSalary,
         scrap: prev.scrap + earnedScrap,
@@ -603,7 +625,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const promoteRole = useCallback((): boolean => {
     const currentState = stateRef.current;
     if (!nextRole) return false;
-    if (currentState.roleXP < currentRole.unlockXP) {
+    const requiredTasks = currentRole.requiredTasks || 50;
+    if (
+      currentState.roleXP < currentRole.unlockXP ||
+      (currentState.roleTasksCompleted || 0) < requiredTasks
+    ) {
       sound.playErrorBuzz();
       return false;
     }
@@ -622,6 +648,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...prev,
         currentRoleId: nextRole.id,
         roleXP: 0, // Reset XP for new role
+        roleTasksCompleted: 0, // Reset task progression counter for new role
         sanity: maxSanity, // Fully rest
         isBurnout: false,
         activeTasks: [],
@@ -665,6 +692,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sound.playLevelUp();
       }
 
+      const roleXpDelta = Math.min(45, Math.round(xDelta * 0.15));
+
       setState((prev) => {
         const nextSanity = Math.min(maxSanity, Math.max(0, prev.sanity + sDelta));
         const nextState: GameState = {
@@ -672,7 +701,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
           sanity: nextSanity,
           isBurnout: nextSanity <= 0,
           salary: Math.max(0, prev.salary + mDelta),
-          roleXP: Math.max(0, prev.roleXP + xDelta),
+          roleXP: Math.max(0, prev.roleXP + roleXpDelta),
           totalXP: prev.totalXP + xDelta,
           scrap: Math.max(0, prev.scrap + scrapDelta),
           stats: {
@@ -702,14 +731,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         confetti({ particleCount: 50, spread: 70, origin: { y: 0.7 } });
       } catch {}
 
-      const xpBonus = score * 25;
+      const roleXpBonus = Math.min(30, score * 3);
+      const totalXpBonus = score * 20;
       const scrapBonus = Math.floor(score * 1.5) + 3;
       const sanityRecovered = Math.min(30, score * 5);
 
       setState((prev) => ({
         ...prev,
-        roleXP: prev.roleXP + xpBonus,
-        totalXP: prev.totalXP + xpBonus,
+        roleXP: prev.roleXP + roleXpBonus,
+        totalXP: prev.totalXP + totalXpBonus,
         scrap: prev.scrap + scrapBonus,
         sanity: Math.min(maxSanity, prev.sanity + sanityRecovered),
         stats: {
@@ -752,6 +782,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     nextRole,
     seniority,
     roleProgressPercent,
+    canPromote,
+    requiredRoleTasks,
     maxSanity,
     sanityRegenPerSec,
     maxConcurrentTasks,
