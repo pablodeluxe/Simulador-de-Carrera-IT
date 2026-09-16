@@ -1,0 +1,6 @@
+{
+  "name": "Simulador de Carrera IT",
+  "description": "Juego de simulación e idle RPG donde comienzas como Técnico Junior y asciendes hasta Arquitecto de Software sobreviviendo a tareas, café y la Ley de Murphy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
