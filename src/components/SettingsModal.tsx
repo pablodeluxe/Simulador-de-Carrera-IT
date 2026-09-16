@@ -9,20 +9,26 @@ import {
   Upload,
   BarChart3,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  Github,
+  ExternalLink,
+  GitBranch,
+  Edit2
 } from 'lucide-react';
 import { useGame } from '../context/GameContext';
-import { exportSaveGame, importSaveGame } from '../utils/storage';
+import { exportSaveGame, importSaveGame, DEFAULT_GIT_REPO_URL } from '../utils/storage';
 
 export const SettingsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
-  const { state, toggleSound, resetGame } = useGame();
+  const { state, toggleSound, resetGame, gitRepoUrl, updateGitRepoUrl } = useGame();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [importJsonText, setImportJsonText] = useState('');
   const [showImportBox, setShowImportBox] = useState(false);
   const [copiedExport, setCopiedExport] = useState(false);
+  const [editingRepoUrl, setEditingRepoUrl] = useState(false);
+  const [tempRepoUrl, setTempRepoUrl] = useState(gitRepoUrl);
 
   if (!isOpen) return null;
 
@@ -191,6 +197,90 @@ export const SettingsModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
                 </button>
               </div>
             )}
+          </div>
+
+          {/* Git Repository Link & Configuration */}
+          <div className="space-y-3 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <Github className="w-4 h-4 text-cyan-400" />
+                <span>Repositorio Git & Código Abierto</span>
+              </div>
+              <button
+                onClick={() => {
+                  setTempRepoUrl(gitRepoUrl);
+                  setEditingRepoUrl(!editingRepoUrl);
+                }}
+                className="text-[11px] text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition cursor-pointer"
+              >
+                <Edit2 className="w-3 h-3" />
+                <span>{editingRepoUrl ? 'Cancelar' : 'Cambiar URL'}</span>
+              </button>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200">
+                    <GitBranch className="w-4 h-4 text-cyan-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-slate-200">Repositorio del Juego</div>
+                    <div className="text-[11px] text-slate-400 truncate max-w-[240px] sm:max-w-xs font-mono">
+                      {gitRepoUrl}
+                    </div>
+                  </div>
+                </div>
+
+                <a
+                  href={gitRepoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition cursor-pointer"
+                >
+                  <span>Abrir Repositorio</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              {editingRepoUrl && (
+                <div className="pt-2 border-t border-slate-800/80 space-y-2">
+                  <label className="text-[11px] text-slate-400 block">
+                    Personalizar URL del repositorio Git:
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="url"
+                      value={tempRepoUrl}
+                      onChange={(e) => setTempRepoUrl(e.target.value)}
+                      placeholder="https://github.com/tu-usuario/tu-repo"
+                      className="flex-1 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500"
+                    />
+                    <button
+                      onClick={() => {
+                        updateGitRepoUrl(tempRepoUrl);
+                        setEditingRepoUrl(false);
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition cursor-pointer"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                  {gitRepoUrl !== DEFAULT_GIT_REPO_URL && (
+                    <button
+                      onClick={() => {
+                        updateGitRepoUrl(DEFAULT_GIT_REPO_URL);
+                        setTempRepoUrl(DEFAULT_GIT_REPO_URL);
+                        setEditingRepoUrl(false);
+                      }}
+                      className="text-[11px] text-slate-500 hover:text-slate-400 underline cursor-pointer"
+                    >
+                      Restablecer a URL original
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Reset Save Data */}

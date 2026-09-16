@@ -98,6 +98,19 @@ export function exportSaveGame(state: GameState): string {
   return JSON.stringify(state, null, 2);
 }
 
+export const DEFAULT_GIT_REPO_URL = 'https://github.com/pablodeluxe/simulador-carrera-it';
+export const GIT_REPO_KEY = 'carrera_it_git_repo_url';
+
+export function getGitRepoUrl(): string {
+  if (typeof window === 'undefined') return DEFAULT_GIT_REPO_URL;
+  return localStorage.getItem(GIT_REPO_KEY) || DEFAULT_GIT_REPO_URL;
+}
+
+export function saveGitRepoUrl(url: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(GIT_REPO_KEY, url);
+}
+
 export function importSaveGame(jsonString: string): GameState | null {
   try {
     const parsed = JSON.parse(jsonString);

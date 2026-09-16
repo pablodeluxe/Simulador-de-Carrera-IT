@@ -10,7 +10,8 @@ import {
   AlertOctagon,
   Flame,
   Coffee,
-  Sparkles
+  Sparkles,
+  Github
 } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { PWAInstallButton } from './PWAInstallButton';
@@ -32,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
     buyConsumable,
     toggleSound,
     setShowTerminalMinigame,
+    gitRepoUrl,
   } = useGame();
 
   const sanityPercent = Math.min(100, Math.max(0, Math.round((state.sanity / maxSanity) * 100)));
@@ -194,6 +196,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Settings className="w-4 h-4" />
           </button>
+
+          {/* Git Repository Link */}
+          <a
+            href={gitRepoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Repositorio Git (Código Fuente)"
+            aria-label="Repositorio Git"
+            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 transition cursor-pointer flex items-center justify-center group"
+          >
+            <Github className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          </a>
 
           {/* PWA Install Button */}
           <PWAInstallButton />

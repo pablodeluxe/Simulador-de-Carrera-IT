@@ -12,7 +12,7 @@ import { ROLES_DATA } from '../data/rolesData';
 import { SHOP_UPGRADES, CONSUMABLES } from '../data/shopData';
 import { MURPHY_EVENTS } from '../data/murphyEvents';
 import { ACHIEVEMENTS_DATA } from '../data/achievementsData';
-import { loadGameState, saveGameState, resetGameStorage } from '../utils/storage';
+import { loadGameState, saveGameState, resetGameStorage, getGitRepoUrl, saveGitRepoUrl, DEFAULT_GIT_REPO_URL } from '../utils/storage';
 import { sound } from '../utils/audio';
 
 interface GameContextType {
@@ -32,6 +32,7 @@ interface GameContextType {
   lastMurphyResult: { title: string; text: string; success: boolean } | null;
   offlineReport: { seconds: number; salaryGained: number; sanityRestored: number } | null;
   showTerminalMinigame: boolean;
+  gitRepoUrl: string;
   
   // Actions
   startTask: (taskDefId: string) => boolean;
@@ -48,6 +49,7 @@ interface GameContextType {
   setShowTerminalMinigame: (show: boolean) => void;
   completeMinigameBonus: (score: number) => void;
   triggerEmergencyMurphy: () => void;
+  updateGitRepoUrl: (url: string) => void;
 }
 
 const GameContext = createContext<GameContextType | null>(null);
@@ -62,6 +64,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [lastMurphyResult, setLastMurphyResult] = useState<{ title: string; text: string; success: boolean } | null>(null);
   const [offlineReport, setOfflineReport] = useState<{ seconds: number; salaryGained: number; sanityRestored: number } | null>(null);
   const [showTerminalMinigame, setShowTerminalMinigame] = useState(false);
+  const [gitRepoUrl, setGitRepoUrlState] = useState<string>(() => getGitRepoUrl());
+
+  const updateGitRepoUrl = useCallback((newUrl: string) => {
+    const cleanUrl = newUrl.trim() || DEFAULT_GIT_REPO_URL;
+    saveGitRepoUrl(cleanUrl);
+    setGitRepoUrlState(cleanUrl);
+  }, []);
 
   // Time tracking
   const murphyTimerRef = useRef<number>(0);
@@ -240,11 +249,35 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setState((prev) => {
         const nextSanity = Math.min(maxSanity, prev.sanity + sanityRestored);
+
+        // Advance active tasks during offline period
+        const updatedActiveTasks = prev.activeTasks.map((task) => {
+          let taskDef = currentRole.tasks.find((t) => t.id === task.taskDefId);
+          if (!taskDef) {
+            for (const r of ROLES_DATA) {
+              const found = r.tasks.find((t) => t.id === task.taskDefId);
+              if (found) {
+                taskDef = found;
+                break;
+              }
+            }
+          }
+          const totalDuration = taskDef ? taskDef.durationSeconds : 10;
+          const progressGained = (cappedSeconds / totalDuration) * 100;
+          const newProgress = Math.min(100, task.progress + progressGained);
+          return {
+            ...task,
+            progress: newProgress,
+            elapsedSeconds: task.elapsedSeconds + cappedSeconds,
+          };
+        });
+
         const nextState: GameState = {
           ...prev,
           salary: prev.salary + salaryEarned,
           sanity: nextSanity,
           isBurnout: nextSanity <= 0,
+          activeTasks: updatedActiveTasks,
           stats: {
             ...prev.stats,
             totalSalaryEarned: prev.stats.totalSalaryEarned + salaryEarned,
@@ -807,6 +840,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setShowTerminalMinigame,
     completeMinigameBonus,
     triggerEmergencyMurphy,
+    gitRepoUrl,
+    updateGitRepoUrl,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

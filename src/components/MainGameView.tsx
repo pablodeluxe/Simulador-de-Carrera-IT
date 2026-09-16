@@ -44,6 +44,29 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
   const [clickedTaskId, setClickedTaskId] = useState<string | null>(null);
   const [duckBounces, setDuckBounces] = useState(0);
 
+  const formatTaskDuration = (seconds: number): string => {
+    if (seconds < 60) return `${seconds}s`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    const remMinutes = minutes % 60;
+    if (remMinutes === 0) return `${hours}h (${minutes}m)`;
+    return `${hours}h ${remMinutes}m`;
+  };
+
+  const formatRemainingTime = (totalSeconds: number, progress: number): string => {
+    const remainingSeconds = Math.max(0, Math.ceil((totalSeconds * (100 - progress)) / 100));
+    if (remainingSeconds < 60) return `${remainingSeconds}s`;
+    const m = Math.floor(remainingSeconds / 60);
+    const s = remainingSeconds % 60;
+    if (m < 60) {
+      return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
+    const h = Math.floor(m / 60);
+    const remM = m % 60;
+    return `${h}h ${remM}m`;
+  };
+
   const handleTaskClick = (taskId: string) => {
     clickActiveTask(taskId);
     setClickedTaskId(taskId);
@@ -228,8 +251,13 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
 
                   {/* Progress bar */}
                   <div className="space-y-1 mb-3">
-                    <div className="flex justify-between text-xs font-mono text-slate-300">
-                      <span>Progreso</span>
+                    <div className="flex justify-between items-center text-xs font-mono text-slate-300">
+                      <span className="flex items-center gap-1.5">
+                        <span>Progreso</span>
+                        <span className="text-slate-400 font-normal">
+                          (~{formatRemainingTime(taskDef.durationSeconds, activeTask.progress)})
+                        </span>
+                      </span>
                       <span className="font-bold text-cyan-400">
                         {Math.floor(activeTask.progress)}%
                       </span>
@@ -322,7 +350,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                   <div className="grid grid-cols-4 gap-1.5 text-center bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/60">
                     <div>
                       <div className="text-[10px] text-slate-400">Tiempo</div>
-                      <div className="text-xs sm:text-sm font-mono font-bold text-slate-200">{task.durationSeconds}s</div>
+                      <div className="text-xs sm:text-sm font-mono font-bold text-slate-200">{formatTaskDuration(task.durationSeconds)}</div>
                     </div>
                     <div>
                       <div className="text-[10px] text-slate-400">Cordura</div>

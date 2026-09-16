@@ -8,7 +8,9 @@ import {
   Sparkles,
   Flame,
   Coffee,
-  CheckCircle2
+  CheckCircle2,
+  Github,
+  ExternalLink
 } from 'lucide-react';
 import { GameProvider, useGame } from './context/GameContext';
 import { Header } from './components/Header';
@@ -29,7 +31,7 @@ function GameDashboard() {
   const [showAchievements, setShowAchievements] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const { state, currentRole, nextRole, canPromote } = useGame();
+  const { state, currentRole, nextRole, canPromote, gitRepoUrl } = useGame();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-slate-950">
@@ -102,6 +104,22 @@ function GameDashboard() {
 
         {activeTab === 'shop' && <ShopView />}
       </main>
+
+      {/* Footer with Git Repository Link */}
+      <footer className="w-full border-t border-slate-900/90 py-3.5 px-4 text-center text-xs text-slate-500 flex flex-wrap items-center justify-center gap-3">
+        <span className="font-semibold text-slate-400">Simulador de Carrera IT</span>
+        <span className="text-slate-700 hidden sm:inline">&bull;</span>
+        <a
+          href={gitRepoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/60 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 transition cursor-pointer"
+        >
+          <Github className="w-3.5 h-3.5" />
+          <span>Repositorio de Git</span>
+          <ExternalLink className="w-3 h-3 text-slate-500" />
+        </a>
+      </footer>
 
       {/* Mobile Floating Bottom Bar for Ergonomic One-Hand Gameplay */}
       <div className="fixed bottom-0 inset-x-0 sm:hidden z-40 bg-slate-950/95 border-t border-slate-800/90 backdrop-blur-lg px-4 py-2 flex items-center justify-around shadow-2xl">
