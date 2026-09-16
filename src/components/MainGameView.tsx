@@ -37,6 +37,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
     clickActiveTask,
     cancelTask,
     buyConsumable,
+    petDuck,
     setShowTerminalMinigame,
     triggerEmergencyMurphy,
   } = useGame();
@@ -74,7 +75,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
   };
 
   const handleDuckClick = () => {
-    sound.playDuckQuack();
+    petDuck();
     setDuckBounces((prev) => prev + 1);
   };
 
@@ -456,7 +457,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
               <span>Pato de Goma (Rubber Duck Debugger)</span>
             </h4>
             <p className="text-xs sm:text-sm text-slate-300">
-              Haz clic para cuaquear o abre el minijuego de terminal para ganar Chatarra y Cordura.
+              Haz clic para desahogarte (+0.5 cordura) o abre el minijuego de terminal para ganar Chatarra y Cordura.
             </p>
           </div>
         </div>

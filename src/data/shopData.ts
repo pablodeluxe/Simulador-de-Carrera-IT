@@ -56,8 +56,8 @@ export const SHOP_UPGRADES: ShopUpgrade[] = [
     level: 0,
     maxLevel: 10,
     costMultiplier: 1.6,
-    effectDescription: '+1.5 de regeneración pasiva de cordura / seg',
-    sanityRegenBonus: 1.5
+    effectDescription: '+0.10 de recuperación de cordura / seg',
+    sanityRegenBonus: 0.10
   },
   {
     id: 'keyboard',
@@ -156,8 +156,8 @@ export const SHOP_UPGRADES: ShopUpgrade[] = [
     level: 0,
     maxLevel: 8,
     costMultiplier: 2.0,
-    effectDescription: '+1.0 de regeneración pasiva de cordura / seg',
-    sanityRegenBonus: 1.0
+    effectDescription: '+0.08 de recuperación de cordura / seg',
+    sanityRegenBonus: 0.08
   },
   {
     id: 'pet-cactus',

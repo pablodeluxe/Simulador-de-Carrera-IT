@@ -25,6 +25,7 @@ interface GameContextType {
   requiredRoleTasks: number;
   maxSanity: number;
   sanityRegenPerSec: number;
+  netSanityPerSec: number;
   maxConcurrentTasks: number;
   clickPower: number;
   autoClickPower: number;
@@ -37,6 +38,7 @@ interface GameContextType {
   // Actions
   startTask: (taskDefId: string) => boolean;
   clickActiveTask: (taskId: string) => void;
+  petDuck: () => void;
   cancelTask: (taskId: string) => void;
   buyConsumable: (consumableId: string) => boolean;
   buyUpgrade: (upgradeId: string) => boolean;
@@ -132,7 +134,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     scrapChanceBonus,
   } = useMemo(() => {
     let baseMaxSanity = 100;
-    let baseSanityRegen = 1.0; // 1% per sec base
+    let bonusSanityRegen = 0; // Bonus from office upgrades/pets (e.g. Silla Ergonómica, Hámster)
     let baseTaskSpeed = 1.0;
     let baseXP = 1.0;
     let baseSalary = 1.0;
@@ -148,7 +150,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!up || level <= 0) return;
 
       if (up.maxSanityBonus) baseMaxSanity += up.maxSanityBonus * level;
-      if (up.sanityRegenBonus) baseSanityRegen += up.sanityRegenBonus * level;
+      if (up.sanityRegenBonus) bonusSanityRegen += up.sanityRegenBonus * level;
       if (up.taskSpeedMultiplier) baseTaskSpeed += up.taskSpeedMultiplier * level;
       if (up.xpMultiplier) baseXP += up.xpMultiplier * level;
       if (up.salaryMultiplier) baseSalary += up.salaryMultiplier * level;
@@ -160,7 +162,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return {
       maxSanity: baseMaxSanity,
-      sanityRegenPerSec: baseSanityRegen,
+      sanityRegenPerSec: bonusSanityRegen,
       taskSpeedMult: baseTaskSpeed,
       xpMultiplier: baseXP,
       salaryMultiplier: baseSalary,
@@ -171,6 +173,17 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       scrapChanceBonus: baseScrapBonus,
     };
   }, [state.purchasedUpgrades]);
+
+  // Current live net flow of sanity per second
+  const netSanityPerSec = useMemo(() => {
+    const activeTasksCount = state.activeTasks.length;
+    if (state.isBurnout) {
+      return Number(Math.max(0.2, 0.25 + sanityRegenPerSec).toFixed(2));
+    }
+    const taskDrain = activeTasksCount * 0.15 * (1 - sanityCostReduction);
+    const idleRegen = activeTasksCount === 0 ? 0.35 : 0;
+    return Number(((idleRegen + sanityRegenPerSec) - taskDrain).toFixed(2));
+  }, [state.activeTasks.length, state.isBurnout, sanityRegenPerSec, sanityCostReduction]);
 
   // Check and unlock achievements
   const checkAchievements = useCallback((currentState: GameState) => {
@@ -360,19 +373,31 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const now = Date.now();
         const deltaSeconds = 0.5;
 
-        // Passive Sanity Regeneration
+        // Sanity dynamics:
+        // Idle recovery when 0 tasks are running (+0.35/s base)
+        // Mental strain when tasks are running: -0.15/s per active task (mitigated by sanityCostReduction)
+        // Upgrades (e.g. Silla ergonómica, hámster) provide bonus sanity recovery at all times
+        const activeTasksCount = prev.activeTasks.length;
+        const taskStrainRate = activeTasksCount * 0.15 * (1 - sanityCostReduction);
+        const idleRestRate = activeTasksCount === 0 ? 0.35 : 0;
+        const netSanityRateCurrent = (idleRestRate + sanityRegenPerSec) - taskStrainRate;
+
         let newSanity = prev.sanity;
-        if (!prev.isBurnout && prev.sanity < maxSanity) {
-          newSanity = Math.min(maxSanity, prev.sanity + sanityRegenPerSec * deltaSeconds);
-        } else if (prev.isBurnout && prev.sanity > 25) {
-          // Recovering from burnout if above 25%
+        if (prev.isBurnout) {
+          // In burnout, task strain pauses; recovery occurs until reaching >= 25 sanity
+          const burnoutRecoveryRate = Math.max(0.2, 0.25 + sanityRegenPerSec);
+          newSanity = Math.min(maxSanity, prev.sanity + burnoutRecoveryRate * deltaSeconds);
+        } else {
+          newSanity = Math.min(maxSanity, Math.max(0, prev.sanity + netSanityRateCurrent * deltaSeconds));
         }
 
-        const isBurnoutNow = newSanity <= 0;
+        const isBurnoutNow = prev.isBurnout ? newSanity < 25 : newSanity <= 0;
         let burnoutsCount = prev.stats.burnoutsSuffered;
         if (isBurnoutNow && !prev.isBurnout) {
           burnoutsCount += 1;
           sound.playErrorBuzz();
+        } else if (!isBurnoutNow && prev.isBurnout) {
+          sound.playCoffeeDrink();
         }
 
         // Auto Passive Salary (Scaled by role and multipliers)
@@ -460,6 +485,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [
     maxSanity,
     sanityRegenPerSec,
+    sanityCostReduction,
     taskSpeedMult,
     salaryMultiplier,
     autoClickPower,
@@ -565,6 +591,25 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }));
   }, []);
 
+  // Pet Duck for anti-stress emotional relief
+  const lastDuckPetRef = useRef<number>(0);
+  const petDuck = useCallback(() => {
+    const now = Date.now();
+    if (now - lastDuckPetRef.current < 250) return;
+    lastDuckPetRef.current = now;
+    sound.playDuckQuack();
+
+    setState((prev) => {
+      const newSanity = Math.min(maxSanity, prev.sanity + 0.5);
+      const isBurnout = prev.isBurnout ? newSanity < 25 : newSanity <= 0;
+      return {
+        ...prev,
+        sanity: newSanity,
+        isBurnout,
+      };
+    });
+  }, [maxSanity]);
+
   // Buy Consumable (Coffee, Pizza, Energy Drink, Desk Nap)
   const buyConsumable = useCallback(
     (consumableId: string): boolean => {
@@ -582,12 +627,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setState((prev) => {
         const addedSanity = (maxSanity * item.sanityRestorePercent) / 100;
         const newSanity = Math.min(maxSanity, prev.sanity + addedSanity);
+        // Exits burnout if sanity reaches 25 or more
+        const isBurnoutNow = prev.isBurnout ? newSanity < 25 : newSanity <= 0;
 
         const nextState: GameState = {
           ...prev,
           salary: prev.salary - item.cost,
           sanity: newSanity,
-          isBurnout: newSanity <= 0,
+          isBurnout: isBurnoutNow,
           stats: {
             ...prev.stats,
             totalCoffeesDrank: prev.stats.totalCoffeesDrank + 1,
@@ -819,6 +866,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     requiredRoleTasks,
     maxSanity,
     sanityRegenPerSec,
+    netSanityPerSec,
     maxConcurrentTasks,
     clickPower,
     autoClickPower,
@@ -828,6 +876,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     showTerminalMinigame,
     startTask,
     clickActiveTask,
+    petDuck,
     cancelTask,
     buyConsumable,
     buyUpgrade,

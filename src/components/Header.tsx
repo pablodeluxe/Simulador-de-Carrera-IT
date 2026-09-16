@@ -30,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
     currentRole,
     seniority,
     maxSanity,
+    netSanityPerSec,
     buyConsumable,
     toggleSound,
     setShowTerminalMinigame,
@@ -93,9 +94,16 @@ export const Header: React.FC<HeaderProps> = ({
                 {state.isBurnout ? '¡BURNOUT TOTAL!' : 'Cordura'}
               </span>
             </div>
-            <span className="font-mono text-slate-300">
-              {Math.round(state.sanity)} / {maxSanity}
-            </span>
+            <div className="flex items-center gap-1.5 font-mono text-slate-300">
+              <span>{Math.round(state.sanity)} / {maxSanity}</span>
+              {!state.isBurnout && (
+                <span className={`text-[10px] font-bold px-1 py-0.2 rounded ${
+                  netSanityPerSec >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'
+                }`}>
+                  {netSanityPerSec >= 0 ? `+${netSanityPerSec}/s` : `${netSanityPerSec}/s`}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Progress track */}
