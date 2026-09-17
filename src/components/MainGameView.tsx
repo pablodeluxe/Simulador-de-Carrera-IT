@@ -32,6 +32,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
     requiredRoleTasks,
     maxConcurrentTasks,
     clickPower,
+    clickSanityCost,
     autoClickPower,
     startTask,
     clickActiveTask,
@@ -259,9 +260,16 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                           (~{formatRemainingTime(taskDef.durationSeconds, activeTask.progress)})
                         </span>
                       </span>
-                      <span className="font-bold text-cyan-400">
-                        {Math.floor(activeTask.progress)}%
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {isClicked && (
+                          <span className="text-[11px] font-bold text-amber-400 animate-pulse">
+                            -{clickSanityCost} 🧠
+                          </span>
+                        )}
+                        <span className="font-bold text-cyan-400">
+                          {Math.floor(activeTask.progress)}%
+                        </span>
+                      </div>
                     </div>
                     <div className="w-full h-4 bg-slate-950 rounded-full p-0.5 border border-slate-800 overflow-hidden">
                       <div
@@ -279,13 +287,39 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                       <span className="text-amber-400">⚙️ {(taskDef.scrapChance * 100).toFixed(0)}%</span>
                     </div>
 
-                    <button
-                      onClick={() => handleTaskClick(activeTask.id)}
-                      className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-3.5 py-2 text-xs sm:text-sm font-extrabold text-slate-950 hover:from-cyan-400 hover:to-blue-500 transition active:scale-95 shadow-md shadow-cyan-500/20 cursor-pointer"
-                    >
-                      <MousePointerClick className="w-4 h-4" />
-                      <span>¡Acelerar! (+{Math.round(clickPower)}%)</span>
-                    </button>
+                    {(() => {
+                      const effectivePower = state.isBurnout
+                        ? Math.max(3, Math.round(clickPower * 0.35))
+                        : Math.round(clickPower);
+
+                      return (
+                        <button
+                          onClick={() => handleTaskClick(activeTask.id)}
+                          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-extrabold transition active:scale-95 shadow-md cursor-pointer ${
+                            state.isBurnout
+                              ? 'bg-rose-950/80 text-rose-300 border border-rose-500/50 hover:bg-rose-900/90 shadow-rose-950/40'
+                              : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-500/20'
+                          }`}
+                          title={
+                            state.isBurnout
+                              ? 'Acelerar con agotamiento (+5% avance, sin costo adicional)'
+                              : `Acelerar tarea (+${effectivePower}% avance, -${clickSanityCost} cordura)`
+                          }
+                        >
+                          <MousePointerClick className="w-4 h-4" />
+                          <span>¡Acelerar! (+{effectivePower}%)</span>
+                          <span
+                            className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono font-bold ${
+                              state.isBurnout
+                                ? 'bg-rose-900/70 text-rose-200 border border-rose-500/30'
+                                : 'bg-slate-950/35 text-amber-300 border border-amber-400/20'
+                            }`}
+                          >
+                            -{clickSanityCost} 🧠
+                          </span>
+                        </button>
+                      );
+                    })()}
                   </div>
                 </div>
               );

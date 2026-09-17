@@ -28,6 +28,7 @@ interface GameContextType {
   netSanityPerSec: number;
   maxConcurrentTasks: number;
   clickPower: number;
+  clickSanityCost: number;
   autoClickPower: number;
   activeMurphyEvent: MurphyEvent | null;
   lastMurphyResult: { title: string; text: string; success: boolean } | null;
@@ -184,6 +185,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const idleRegen = activeTasksCount === 0 ? 0.35 : 0;
     return Number(((idleRegen + sanityRegenPerSec) - taskDrain).toFixed(2));
   }, [state.activeTasks.length, state.isBurnout, sanityRegenPerSec, sanityCostReduction]);
+
+  // Mental sanity consumed per manual acceleration click (base 2.0, reduced by certifications / office perks)
+  const clickSanityCost = useMemo(() => {
+    return Number(Math.max(0.5, 2.0 * (1 - sanityCostReduction)).toFixed(1));
+  }, [sanityCostReduction]);
 
   // Check and unlock achievements
   const checkAchievements = useCallback((currentState: GameState) => {
@@ -550,7 +556,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [maxConcurrentTasks, currentRole, sanityCostReduction]
   );
 
-  // Click / Tap Active Task to accelerate
+  // Click / Tap Active Task to accelerate (rushing causes mental exhaustion and consumes sanity)
   const clickActiveTask = useCallback(
     (taskId: string) => {
       sound.playKeyClick();
@@ -559,28 +565,61 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const taskIndex = prev.activeTasks.findIndex((t) => t.id === taskId);
         if (taskIndex === -1) return prev;
 
+        const effectiveClickPower = prev.isBurnout
+          ? Math.max(3, Math.round(clickPower * 0.35))
+          : clickPower;
+
         const target = prev.activeTasks[taskIndex];
-        const newProgress = target.progress + clickPower;
+        const newProgress = target.progress + effectiveClickPower;
+
+        // Rushing costs mental energy:
+        // Consumes sanity unless already in burnout (where sanity cannot drop below 0)
+        const sanityLost = prev.isBurnout ? 0 : clickSanityCost;
+        const nextSanity = Math.max(0, Number((prev.sanity - sanityLost).toFixed(1)));
+        const isBurnoutNow = prev.isBurnout ? true : nextSanity <= 0;
+        let burnoutsCount = prev.stats.burnoutsSuffered;
+
+        if (isBurnoutNow && !prev.isBurnout) {
+          burnoutsCount += 1;
+          sound.playErrorBuzz();
+        }
 
         if (newProgress >= 100) {
           setTimeout(() => completeTask(taskId), 0);
-          return {
+          const nextState: GameState = {
             ...prev,
-            stats: { ...prev.stats, totalClicks: prev.stats.totalClicks + 1 },
+            sanity: nextSanity,
+            isBurnout: isBurnoutNow,
+            stats: {
+              ...prev.stats,
+              totalClicks: prev.stats.totalClicks + 1,
+              totalSanityLost: prev.stats.totalSanityLost + sanityLost,
+              burnoutsSuffered: burnoutsCount,
+            },
           };
+          return checkAchievements(nextState);
         }
 
         const newTasks = [...prev.activeTasks];
         newTasks[taskIndex] = { ...target, progress: newProgress };
 
-        return {
+        const nextState: GameState = {
           ...prev,
+          sanity: nextSanity,
+          isBurnout: isBurnoutNow,
           activeTasks: newTasks,
-          stats: { ...prev.stats, totalClicks: prev.stats.totalClicks + 1 },
+          stats: {
+            ...prev.stats,
+            totalClicks: prev.stats.totalClicks + 1,
+            totalSanityLost: prev.stats.totalSanityLost + sanityLost,
+            burnoutsSuffered: burnoutsCount,
+          },
         };
+
+        return checkAchievements(nextState);
       });
     },
-    [clickPower, completeTask]
+    [clickPower, clickSanityCost, completeTask, checkAchievements]
   );
 
   // Cancel Active Task
@@ -869,6 +908,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     netSanityPerSec,
     maxConcurrentTasks,
     clickPower,
+    clickSanityCost,
     autoClickPower,
     activeMurphyEvent,
     lastMurphyResult,

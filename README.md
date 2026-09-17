@@ -34,19 +34,21 @@ Las tareas están diseñadas con tiempos congruentes a la vida real en IT:
 - **Maratón Crítico (60 min)**: Migraciones completas de bases de datos, despliegues a producción en clústeres Kubernetes.
 
 #### Mecánicas de Aceleración:
-- **Clic Activo**: Acelera la barra de progreso de una tarea activa (+15% por clic de base).
-- **Gato Programador**: Con la mascota del gato equipada, realiza clics automáticos mientras duerme sobre el teclado.
+- **Clic Activo (Rush / Apuro)**: Acelera la barra de progreso de una tarea activa (+15% por clic de base), pero **consume -2.0 de Cordura por clic** debido al agotamiento mental de apurarse.
+- **Agotamiento por Crunch**: Acelerar impulsivamente sin descanso ni café puede reducir rápidamente tu cordura a 0 y detonar el temido **Burnout**.
+- **Gato Programador**: Con la mascota del gato equipada, realiza clics automáticos sin fatiga mientras duerme sobre el teclado.
 - **Cancelación Segura**: Puedes cancelar tareas en ejecución si necesitas reordenar tus prioridades.
 
 ---
 
 ### 🧠 3. Sistema Dinámico de Cordura (Sanity) & Burnout
 El bienestar mental es el recurso más valioso de un profesional de IT:
-- **Desgaste Cognitivo**: Cada tarea en ejecución genera un drenaje sostenido de **-0.15 cordura/segundo** (mitigable con setup ergonómico y certificaciones).
-- **Fatiga por Multitasking**: Ejecutar 2 o 3 tareas simultáneas gracias al *Monitor Ultrawide* acelera el drenaje de cordura.
+- **Fatiga por Aceleración (Crunch Time)**: Forzar el avance manual de tareas consume **-2.0 de cordura por clic** (mitigable con perks y certificaciones).
+- **Desgaste Cognitivo Pasivo**: Cada tarea en ejecución genera un drenaje sostenido de **-0.15 cordura/segundo**.
+- **Fatiga por Multitasking**: Ejecutar 2 o 3 tareas simultáneas gracias al *Monitor Ultrawide* acumula el drenaje de cordura.
 - **Pausa de Descanso Pasiva**: Cuando no hay tareas activas, recuperas naturalmente **+0.35 cordura/segundo**.
 - **¡BURNOUT TOTAL!**:
-  - Si tu cordura llega a 0, caes en agotamiento extremo: la velocidad de avance de las tareas se reduce al **35%** y tus ingresos pasivos bajan al **25%**.
+  - Si tu cordura llega a 0, caes en agotamiento extremo: la velocidad de avance de las tareas se reduce al **35%**, el poder de aceleración cae a un tercio y tus ingresos pasivos bajan al **25%**.
   - Para salir del Burnout, debes recuperar al menos un **25% de Cordura** descansando o mediante consumibles.
 - **Indicador en Vivo**: La barra superior muestra en tiempo real tu tasa neta de recuperación o drenaje (ej. `+0.35/s` o `-0.15/s`).
 - **Rubber Duck Debugger 🦆**: Haz clic en el pato de goma en cualquier momento para obtener **+0.5 de Cordura** instantánea por alivio antiestrés.
