@@ -132,20 +132,6 @@ export const SHOP_UPGRADES: ShopUpgrade[] = [
     xpMultiplier: 0.08
   },
   {
-    id: 'pet-cat',
-    name: '🐱 Gato Programador en el Teclado',
-    category: 'pet',
-    description: 'Camina sobre la barra espaciadora y hace clics automáticos mientras duerme plácidamente.',
-    icon: 'Cat',
-    cost: 300,
-    currency: 'salary',
-    level: 0,
-    maxLevel: 10,
-    costMultiplier: 1.9,
-    effectDescription: '+1 clic automático por segundo en la tarea activa',
-    autoClickPower: 1
-  },
-  {
     id: 'pet-hamster',
     name: '🐹 Hámster en Rueda de Servidor',
     category: 'pet',

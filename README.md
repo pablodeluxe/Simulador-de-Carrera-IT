@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8.svg?logo=tailwindcss)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646cff.svg?logo=vite)](https://vitejs.dev/)
-[![Version](https://img.shields.io/badge/version-v1.6-cyan.svg)](#)
+[![Version](https://img.shields.io/badge/version-v1.7-cyan.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 
 > Un juego interactivo de simulación, estrategia e **Idle RPG** donde comienzas como un humilde Técnico de Soporte L1 y escalas en la jerarquía corporativa tecnológica hasta convertirte en CTO & Leyenda del Silicio. Sobrevive a tareas críticas, gestiona tu cordura a base de café y sortea las implacables crisis de la **Ley de Murphy**.
@@ -46,7 +46,6 @@ El juego cuenta con más de **110 tareas especializadas** distribuidas estratég
 #### Mecánicas de Aceleración:
 - **Clic Activo (Rush / Apuro)**: Acelera la barra de progreso de una tarea activa (+15% por clic de base), pero **consume -2.0 de Cordura por clic** debido al agotamiento mental de apurarse.
 - **Agotamiento por Crunch**: Acelerar impulsivamente sin descanso ni café puede reducir rápidamente tu cordura a 0 y detonar el temido **Burnout**.
-- **Gato Programador**: Con la mascota del gato equipada, realiza clics automáticos sin fatiga mientras duerme sobre el teclado.
 - **Cancelación Segura**: Puedes cancelar tareas en ejecución si necesitas reordenar tus prioridades.
 
 ---
@@ -79,7 +78,6 @@ El bienestar mental es el recurso más valioso de un profesional de IT:
 | **Estación de Trabajo** | 🎧 Auriculares Noise-Cancelling | +20 de Cordura Máxima |
 | **Estación de Trabajo** | 🍓 Granja de Raspberry Pi | Genera Chatarra Electrónica pasiva |
 | **Mascotas** | 🦆 Pato de Goma | +8% XP en tareas y desahogo interactivo |
-| **Mascotas** | 🐱 Gato en el Teclado | +1 auto-clic por segundo en tareas |
 | **Mascotas** | 🐹 Hámster en Rueda de Servidor | +0.08 de regeneración de cordura/seg por nivel |
 | **Mascotas** | 🌵 Cactus Indestructible | Reduce el costo de cordura de tareas en 10% |
 | **Cursos** | 📘 Clean Code & Refactoring | +10% de XP por nivel |
@@ -233,6 +231,10 @@ npm run lint
 ---
 
 ## 📅 Historial de Versiones (Changelog)
+
+### [v1.7] - 2026
+- **Retiro de Mascota de Soporte (Gato Programador)**: Se retiró el "Gato Programador en el Teclado" del catálogo de mascotas de oficina y su efecto de autoclics por segundo, manteniendo en su categoría a las mascotas de soporte táctico (el Pato de Goma, el Hámster en Rueda y el Cactus Indestructible).
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.7`.
 
 ### [v1.6] - 2026
 - **Ajuste de Evento de Crisis a Inspección de Microsoft**: Se adaptó el evento de auditoría de licencias de software para reflejar una inspección directa de inspectores de Microsoft (revisión de licencias CAL de Windows Server, SQL Server y puestos de Office), manteniendo la hilarante defensa con software libre GNU/Linux.

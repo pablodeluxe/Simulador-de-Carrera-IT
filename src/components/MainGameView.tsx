@@ -33,7 +33,6 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
     maxConcurrentTasks,
     clickPower,
     clickSanityCost,
-    autoClickPower,
     startTask,
     clickActiveTask,
     cancelTask,
@@ -205,11 +204,6 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
             <Terminal className="w-4.5 h-4.5 text-cyan-400" />
             <span>Tareas en Ejecución ({state.activeTasks.length} / {maxConcurrentTasks})</span>
           </h2>
-          {autoClickPower > 0 && (
-            <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
-              🐱 Gato programador activo (+{autoClickPower} auto-clics/s)
-            </span>
-          )}
         </div>
 
         {state.activeTasks.length === 0 ? (
