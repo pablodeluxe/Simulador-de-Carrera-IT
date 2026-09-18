@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { exportSaveGame, importSaveGame, DEFAULT_GIT_REPO_URL } from '../utils/storage';
+import { APP_VERSION } from '../utils/version';
 
 export const SettingsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -64,9 +65,14 @@ export const SettingsModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
               <Settings className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-white">
-                Configuración &bull; Simulador de Carrera IT
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  Configuración
+                </h3>
+                <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-900 text-cyan-400 border border-slate-800">
+                  {APP_VERSION}
+                </span>
+              </div>
               <p className="text-xs text-slate-400">
                 Opciones de juego, datos de guardado y métricas de carrera
               </p>

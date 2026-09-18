@@ -4,6 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8.svg?logo=tailwindcss)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646cff.svg?logo=vite)](https://vitejs.dev/)
+[![Version](https://img.shields.io/badge/version-v1.2-cyan.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 
 > Un juego interactivo de simulación, estrategia e **Idle RPG** donde comienzas como un humilde Técnico de Soporte L1 y escalas en la jerarquía corporativa tecnológica hasta convertirte en CTO & Leyenda del Silicio. Sobrevive a tareas críticas, gestiona tu cordura a base de café y sortea las implacables crisis de la **Ley de Murphy**.
@@ -13,25 +14,34 @@
 ## 🚀 Características Principales
 
 ### 📈 1. Sistema de Progresión y Roles Profesionales
-Asciende a lo largo de 7 roles realistas con sus propias responsabilidades, escalas salariales y descripciones satíricas del mundo corporativo tecnológico:
-1. **Soporte Técnico L1 (HelpDesk)**: *"¿Ya intentó apagar y volver a encender?"*
-2. **Administrador Junior de Redes & Sistemas (SysAdmin Jr)**: Cables trenzados y terminales SSH.
-3. **Desarrollador Frontend Junior**: Centrar divs en CSS y lidiar con dependencias de npm.
-4. **Desarrollador Full-Stack Semi-Senior**: APIs REST, bases de datos y microservicios que a veces funcionan.
-5. **Ingeniero DevOps & Cloud**: Pipelines CI/CD rotos, clústeres de Kubernetes y facturas de AWS.
-6. **Arquitecto de Software & Tech Lead**: Dibujar diagramas en Miro y debatir microservicios vs. monolitos.
-7. **Director de Tecnología (CTO) & Leyenda del Silicio**: Toma de decisiones estratégicas y negociar presupuestos.
+Asciende a lo largo de 10 roles realistas con sus propias responsabilidades, escalas salariales y descripciones satíricas del mundo corporativo tecnológico:
+1. **Técnico Informático**: *"¿Sopló el conector antes de llamarme?"*
+2. **Analista Help Desk**: *"¿Ha intentado apagarlo y volverlo a encender?"*
+3. **Tester Manual (QA)**: *"No es un bug, es una característica no documentada."*
+4. **Administrador de Redes**: Cables espagueti, switches rebeldes y loops de broadcast.
+5. **Administrador de Servidores (SysAdmin)**: Comandos de terminal, crontabs y sudo a las 3 AM.
+6. **Desarrollador Frontend**: Centrar divs en CSS, Safari bugs y node_modules gigantes.
+7. **Desarrollador Backend**: APIs REST, WebSockets, race conditions y validaciones defensivas.
+8. **Administrador de Base de Datos (DBA)**: Índices compuestos, bloqueos deadlocks y pesadillas con DROP TABLE.
+9. **Ingeniero DevOps**: Pipelines de CI/CD rotos, YAML indescifrables y clústeres de Kubernetes.
+10. **Arquitecto de Software & Tech Lead**: Dibujar diagramas en Miro, debates monolito vs. microservicios y keynotes.
 
 Cada rol cuenta con niveles de seniority (**Junior**, **Semi-Senior**, **Senior**) y requiere completar **50 tareas del rol** y alcanzar el XP objetivo para desbloquear la promoción.
 
 ---
 
-### ⏱️ 2. Tareas Equilibradas y Realistas (5 a 60 Minutos)
-Las tareas están diseñadas con tiempos congruentes a la vida real en IT:
-- **Sprint Corto (5 min)**: Mantenimiento rápido, cambio de tóner, revisión de pull requests.
-- **Sprint Medio (10 min)**: Configuración de routers, refactorización de componentes React.
-- **Sprint Largo (30 min)**: Implementación de autenticación OAuth, pipelines de Docker, resolución de incidentes.
-- **Maratón Crítico (60 min)**: Migraciones completas de bases de datos, despliegues a producción en clústeres Kubernetes.
+### ⏱️ 2. Catálogo Extendido de Tareas por Rol y Seniority (5 a 60 Minutos)
+El juego cuenta con más de **110 tareas especializadas** distribuidas estratégicamente en los 10 roles y en cada uno de los 3 niveles de seniority (**Junior**, **Semi-Senior**, **Senior**):
+- **Nivel Junior**: Tareas de iniciación, novatadas y primeros auxilios informáticos (3-4 tareas por rol de 5m, 10m y 30m).
+- **Nivel Semi-Senior**: Desafíos técnicos intermedios, rescates de servidores y refactorizaciones (3-4 tareas por rol de 5m, 10m, 30m y 60m con mayores recompensas y chatarra).
+- **Nivel Senior**: Operaciones críticas de alta tensión, arquitectura, migraciones globales y contingencias (3 tareas maestras por rol de 10m, 30m y 60m con enormes recompensas en XP y sueldo).
+- **Filtro Rápido por Seniority**: La vista principal permite filtrar fácilmente las tareas en *Todas*, *Junior*, *Semi-Senior* o *Senior*.
+
+#### Tiempos Congruentes y Realistas:
+- **Sprint Corto (5 min)**: Mantenimiento rápido, cambio de tóner, desatorar cables, pings de emergencia.
+- **Sprint Medio (10 min)**: Configuración de routers, refactorización de componentes React, consultas SQL complejas.
+- **Sprint Largo (30 min)**: Implementación de pipelines de Docker, resolución de incidentes, arquitectura DDD.
+- **Maratón Crítico (60 min)**: Migraciones masivas de bases de datos, despliegues multi-cloud, recuperación de desastres.
 
 #### Mecánicas de Aceleración:
 - **Clic Activo (Rush / Apuro)**: Acelera la barra de progreso de una tarea activa (+15% por clic de base), pero **consume -2.0 de Cordura por clic** debido al agotamiento mental de apurarse.
@@ -79,15 +89,26 @@ El bienestar mental es el recurso más valioso de un profesional de IT:
 
 ---
 
-### ⚠️ 5. Crisis de la Ley de Murphy
-Aproximadamente cada 2 minutos de juego activo, puede desencadenarse una emergencia tecnológica impredecible inspirada en desastres reales:
-- *El despliegue de los viernes a las 18:00 hs.*
-- *El pasante ejecutó un `DELETE FROM users` sin WHERE en producción.*
-- *La cafetera del piso 4 se incendió.*
-- *Se venció el certificado SSL wildcard.*
-- *El cliente pide rehacer todo el backend en Blockchain antes de mañana.*
+### ⚠️ 5. Crisis de la Ley de Murphy (12 Eventos Aleatorios)
+Aproximadamente cada 2 minutos de juego activo, puede desencadenarse una emergencia tecnológica impredecible inspirada en desastres reales del mundo de la tecnología:
+- 🚨 *¡Caída masiva de AWS US-EAST-1!*
+- 👔 *¡Visita sorpresa del CEO con consultores!*
+- ⏰ *Deploy a producción: Viernes 17:59.*
+- 👶 *El becario ejecutó un comando peligroso en el servidor.*
+- ☕ *¡La cafetera central ha explotado!*
+- 📅 *Reunión de 2 horas sin agenda ni objetivos.*
+- ☣️ *Alerta de phishing y ransomware en el sector contable.*
+- 🧯 **[NUEVO]** *¡Incendio en el rack de baterías (UPS)!*
+- 💣 **[NUEVO]** *Certificado SSL wildcard expirado en producción.*
+- 🤖 **[NUEVO]** *La IA alucinó y borró la tabla de usuarios.*
+- ⚡ **[NUEVO]** *Auditoría sorpresa de licencias de software por la BSA.*
+- 🌧️ **[NUEVO]** *Filtración de agua del aire acondicionado sobre el switch central.*
 
-Cada crisis te ofrece opciones de respuesta con probabilidades de éxito, recompensas y penalizaciones en Cordura, Sueldo y Chatarra.
+#### ⚖️ Rebalanceo de Probabilidades y Riesgo Táctico:
+Las probabilidades de éxito han sido reajustadas con rigor para que las decisiones tengan verdadero peso e incertidumbre:
+- Las opciones temerarias ofrecen enormes recompensas de XP, Sueldo y Chatarra con un éxito del ~40%-65%.
+- Las soluciones de compromiso o diplomacia técnica rondan el ~68%-78% de éxito.
+- Incluso las alternativas conservadoras o evasivas conllevan un riesgo real (~80%-84%) con desenlaces humorísticos en caso de fracaso.
 
 ---
 
@@ -197,7 +218,8 @@ npm run lint
 │   │   └── game.ts          # Definiciones TypeScript de estados y entidades
 │   ├── utils/
 │   │   ├── sound.ts         # Sintetizador procedural con Web Audio API
-│   │   └── storage.ts       # Serialización y persistencia en LocalStorage
+│   │   ├── storage.ts       # Serialización y persistencia en LocalStorage
+│   │   └── version.ts       # Constantes de versión de la aplicación
 │   ├── App.tsx              # Componente raíz y navegación por pestañas
 │   ├── index.css            # Configuración de Tailwind CSS v4
 │   └── main.tsx             # Punto de entrada de React
@@ -207,6 +229,32 @@ npm run lint
 ├── vite.config.ts           # Configuración de Vite
 └── README.md                # Documentación del proyecto
 ```
+
+---
+
+## 📅 Historial de Versiones (Changelog)
+
+### [v1.2] - 2026
+- **Ajuste de Probabilidades en Crisis de Murphy**: Se redujeron y calibraron las probabilidades de éxito de las decisiones (anteriormente muy indulgentes entre 85%-100%), creando un balance más tenso, impredecible y con riesgo real de fallo.
+- **5 Nuevas Crisis Aleatorias de Murphy**: Se añadieron 5 incidentes catastróficos inspirados en el anecdotario informático (incendio de UPS, certificado SSL wildcard expirado, IA que borra usuarios, auditoría sorpresa de licencias de la BSA y goteras de aire acondicionado sobre el switch central), llevando el total a 12 emergencias únicas.
+- **Consecuencias de Fracaso Específicas**: Cada opción de respuesta ahora incluye desenlaces satíricos y penalizaciones calculadas en cordura, sueldo y chatarra en caso de fallar la tirada de probabilidad.
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.2`.
+
+### [v1.1] - 2026
+- **Expansión Masiva de Tareas**: Más de 110 tareas especializadas distribuidas entre los 10 roles y categorizadas por seniority (**Junior**, **Semi-Senior**, **Senior**).
+- **Filtro Rápido por Seniority**: Selector de pestañas dinámico en la vista de trabajo para filtrar tareas por nivel con conteos en vivo.
+- **Mecánica de Desgaste por Aceleración (Crunch Time)**: Acelerar tareas manualmente (+15% de progreso) ahora consume -2.0 de Cordura por clic, introduciendo riesgo táctico de Burnout.
+- **Penalización por Burnout**: Al caer en Burnout, la velocidad de procesamiento de tareas y la ganancia de recursos se reduce severamente hasta recuperar la estabilidad mental.
+- **Sincronización de Versión**: Indicadores visuales de versión (v1.1) visibles en la barra de pie de página y en el modal de configuración.
+
+### [v1.0] - 2026
+- **Lanzamiento Inicial**:
+  - 10 roles profesionales de la industria IT con progresión y árboles de carrera.
+  - Gestión de recursos vitales: Dinero, Cordura mental y Chatarra electrónica.
+  - Eventos aleatorios interactivos de la **Ley de Murphy** con decisiones de riesgo/recompensa.
+  - Tienda de consumibles, mejoras ergonómicas de oficina y cursos de formación técnica.
+  - Minijuego de consola interactiva con comandos reales (`ping`, `curl`, `grep`, `fsck`, `vim`).
+  - Efectos de sonido procedurales con Web Audio API y persistencia en LocalStorage con exportación JSON.
 
 ---
 

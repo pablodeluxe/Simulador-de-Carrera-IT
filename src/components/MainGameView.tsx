@@ -45,6 +45,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
 
   const [clickedTaskId, setClickedTaskId] = useState<string | null>(null);
   const [duckBounces, setDuckBounces] = useState(0);
+  const [seniorityFilter, setSeniorityFilter] = useState<'all' | 'Junior' | 'Semi-Senior' | 'Senior'>('all');
 
   const formatTaskDuration = (seconds: number): string => {
     if (seconds < 60) return `${seconds}s`;
@@ -330,18 +331,79 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
 
       {/* AVAILABLE TASKS FOR CURRENT ROLE */}
       <div className="space-y-3.5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <Zap className="w-4.5 h-4.5 text-amber-400" />
-            <span>Tareas Disponibles ({currentRole.title})</span>
-          </h2>
-          <span className="text-xs text-slate-400">
-            Costo en Cordura se recupera pasivamente o con Café
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div>
+            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <Zap className="w-4.5 h-4.5 text-amber-400" />
+              <span>Tareas Disponibles ({currentRole.title})</span>
+            </h2>
+            <span className="text-xs text-slate-400">
+              Costo en Cordura se recupera pasivamente o con Café &bull; {currentRole.tasks.length} tareas totales
+            </span>
+          </div>
+
+          {/* Seniority Filter Tabs */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800 text-xs overflow-x-auto">
+            <button
+              onClick={() => setSeniorityFilter('all')}
+              className={`px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap cursor-pointer ${
+                seniorityFilter === 'all'
+                  ? 'bg-slate-800 text-cyan-400 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Todas ({currentRole.tasks.length})
+            </button>
+            <button
+              onClick={() => setSeniorityFilter('Junior')}
+              className={`px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                seniorityFilter === 'Junior'
+                  ? 'bg-emerald-950/70 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>Junior</span>
+              <span className="text-[10px] px-1 rounded bg-slate-900 text-emerald-400">
+                {currentRole.tasks.filter((t) => !t.requiredSeniority).length}
+              </span>
+            </button>
+            <button
+              onClick={() => setSeniorityFilter('Semi-Senior')}
+              className={`px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                seniorityFilter === 'Semi-Senior'
+                  ? 'bg-amber-950/70 text-amber-300 border border-amber-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>Semi-Senior</span>
+              <span className="text-[10px] px-1 rounded bg-slate-900 text-amber-400">
+                {currentRole.tasks.filter((t) => t.requiredSeniority === 'Semi-Senior').length}
+              </span>
+            </button>
+            <button
+              onClick={() => setSeniorityFilter('Senior')}
+              className={`px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                seniorityFilter === 'Senior'
+                  ? 'bg-purple-950/70 text-purple-300 border border-purple-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>Senior</span>
+              <span className="text-[10px] px-1 rounded bg-slate-900 text-purple-400">
+                {currentRole.tasks.filter((t) => t.requiredSeniority === 'Senior').length}
+              </span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-          {currentRole.tasks.map((task) => {
+          {currentRole.tasks
+            .filter((task) => {
+              if (seniorityFilter === 'all') return true;
+              if (seniorityFilter === 'Junior') return !task.requiredSeniority;
+              return task.requiredSeniority === seniorityFilter;
+            })
+            .map((task) => {
             const isSeniorityLocked =
               task.requiredSeniority === 'Senior'
                 ? seniority !== 'Senior'

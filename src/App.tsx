@@ -23,6 +23,7 @@ import { OfflineProgressModal } from './components/OfflineProgressModal';
 import { AchievementsModal } from './components/AchievementsModal';
 import { SettingsModal } from './components/SettingsModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { APP_VERSION } from './utils/version';
 
 type NavTab = 'desk' | 'career' | 'shop';
 
@@ -105,9 +106,12 @@ function GameDashboard() {
         {activeTab === 'shop' && <ShopView />}
       </main>
 
-      {/* Footer with Git Repository Link */}
-      <footer className="w-full border-t border-slate-900/90 py-3.5 px-4 text-center text-xs text-slate-500 flex flex-wrap items-center justify-center gap-3">
+      {/* Footer with Git Repository Link & Version */}
+      <footer className="w-full border-t border-slate-900/90 py-3.5 px-4 text-center text-xs text-slate-500 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
         <span className="font-semibold text-slate-400">Simulador de Carrera IT</span>
+        <span className="inline-flex items-center font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-900 text-cyan-400 border border-slate-800 tracking-wide">
+          {APP_VERSION}
+        </span>
         <span className="text-slate-700 hidden sm:inline">&bull;</span>
         <a
           href={gitRepoUrl}
