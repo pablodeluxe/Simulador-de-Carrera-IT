@@ -1694,7 +1694,7 @@ export const ROLES_DATA: RoleDefinition[] = [
       },
       {
         id: 'arch-s2',
-        title: 'Veto Técnico a la Idea del Pasante',
+        title: 'Veto Técnico a la Idea del Trainee',
         description: 'Explicar calmadamente por qué no vamos a reescribir todo el backend en un framework que salió ayer en HackerNews.',
         durationSeconds: 600, // 10 min
         baseXP: 3800,

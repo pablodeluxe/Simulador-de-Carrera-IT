@@ -71,6 +71,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
   };
 
   const handleTaskClick = (taskId: string) => {
+    if (state.isBurnout) return;
     clickActiveTask(taskId);
     setClickedTaskId(taskId);
     setTimeout(() => setClickedTaskId(null), 150);
@@ -97,7 +98,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                   ¡ESTADO DE BURNOUT ACTIVO!
                 </h3>
                 <p className="text-xs text-rose-200/80">
-                  Tu cordura llegó a 0. La velocidad de las tareas está reducida al 35%. ¡Toma café o descansa urgente!
+                  Tu cordura llegó a 0. Aceleración de trabajo bloqueada y velocidad pasiva reducida al 35%. ¡Toma café o descansa urgente!
                 </p>
               </div>
             </div>
@@ -234,11 +235,11 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3 mb-2.5">
-                    <div className="min-w-0">
-                      <h4 className="text-sm sm:text-base font-bold text-white truncate">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm sm:text-base font-bold text-white leading-snug break-words">
                         {taskDef.title}
                       </h4>
-                      <p className="text-xs text-slate-300 line-clamp-1 mt-0.5">
+                      <p className="text-xs text-slate-300 leading-relaxed mt-1 break-words">
                         {taskDef.description}
                       </p>
                     </div>
@@ -246,7 +247,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                     <button
                       onClick={() => cancelTask(activeTask.id)}
                       title="Cancelar Tarea"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -289,35 +290,32 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                     </div>
 
                     {(() => {
-                      const effectivePower = state.isBurnout
-                        ? Math.max(3, Math.round(clickPower * 0.35))
-                        : Math.round(clickPower);
+                      const effectivePower = Math.round(clickPower);
 
                       return (
                         <button
                           onClick={() => handleTaskClick(activeTask.id)}
-                          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-extrabold transition active:scale-95 shadow-md cursor-pointer ${
+                          disabled={state.isBurnout}
+                          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-extrabold transition shadow-md ${
                             state.isBurnout
-                              ? 'bg-rose-950/80 text-rose-300 border border-rose-500/50 hover:bg-rose-900/90 shadow-rose-950/40'
-                              : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-500/20'
+                              ? 'bg-slate-800/80 text-slate-400 border border-slate-700/60 cursor-not-allowed opacity-60'
+                              : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-500/20 active:scale-95 cursor-pointer'
                           }`}
                           title={
                             state.isBurnout
-                              ? 'Acelerar con agotamiento (+5% avance, sin costo adicional)'
+                              ? '¡Bloqueado por Burnout! No puedes acelerar tareas sin cordura. Consume café o descansa para recuperarte.'
                               : `Acelerar tarea (+${effectivePower}% avance, -${clickSanityCost} cordura)`
                           }
                         >
                           <MousePointerClick className="w-4 h-4" />
-                          <span>¡Acelerar! (+{effectivePower}%)</span>
-                          <span
-                            className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono font-bold ${
-                              state.isBurnout
-                                ? 'bg-rose-900/70 text-rose-200 border border-rose-500/30'
-                                : 'bg-slate-950/35 text-amber-300 border border-amber-400/20'
-                            }`}
-                          >
-                            -{clickSanityCost} 🧠
+                          <span>
+                            {state.isBurnout ? 'Aceleración Bloqueada' : `¡Acelerar! (+${effectivePower}%)`}
                           </span>
+                          {!state.isBurnout && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-mono font-bold bg-slate-950/35 text-amber-300 border border-amber-400/20">
+                              -{clickSanityCost} 🧠
+                            </span>
+                          )}
                         </button>
                       );
                     })()}
@@ -437,7 +435,7 @@ export const MainGameView: React.FC<{ onNavigateToCareer: () => void }> = ({
                       </span>
                     )}
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-300 mb-3.5 line-clamp-2">
+                  <p className="text-xs sm:text-sm text-slate-300 mb-3.5 leading-relaxed break-words">
                     {task.description}
                   </p>
                 </div>

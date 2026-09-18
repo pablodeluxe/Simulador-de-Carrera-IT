@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8.svg?logo=tailwindcss)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646cff.svg?logo=vite)](https://vitejs.dev/)
-[![Version](https://img.shields.io/badge/version-v1.2-cyan.svg)](#)
+[![Version](https://img.shields.io/badge/version-v1.5-cyan.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 
 > Un juego interactivo de simulación, estrategia e **Idle RPG** donde comienzas como un humilde Técnico de Soporte L1 y escalas en la jerarquía corporativa tecnológica hasta convertirte en CTO & Leyenda del Silicio. Sobrevive a tareas críticas, gestiona tu cordura a base de café y sortea las implacables crisis de la **Ley de Murphy**.
@@ -58,8 +58,8 @@ El bienestar mental es el recurso más valioso de un profesional de IT:
 - **Fatiga por Multitasking**: Ejecutar 2 o 3 tareas simultáneas gracias al *Monitor Ultrawide* acumula el drenaje de cordura.
 - **Pausa de Descanso Pasiva**: Cuando no hay tareas activas, recuperas naturalmente **+0.35 cordura/segundo**.
 - **¡BURNOUT TOTAL!**:
-  - Si tu cordura llega a 0, caes en agotamiento extremo: la velocidad de avance de las tareas se reduce al **35%**, el poder de aceleración cae a un tercio y tus ingresos pasivos bajan al **25%**.
-  - Para salir del Burnout, debes recuperar al menos un **25% de Cordura** descansando o mediante consumibles.
+  - Si tu cordura llega a 0, caes en agotamiento extremo: la aceleración manual de tareas queda **totalmente bloqueada**, la velocidad de avance pasiva se reduce al **35%** y tus ingresos bajan al **25%**.
+  - Para salir del Burnout, debes recuperar al menos un **25% de Cordura** descansando o mediante consumibles (café, siestas o pizza).
 - **Indicador en Vivo**: La barra superior muestra en tiempo real tu tasa neta de recuperación o drenaje (ej. `+0.35/s` o `-0.15/s`).
 - **Rubber Duck Debugger 🦆**: Haz clic en el pato de goma en cualquier momento para obtener **+0.5 de Cordura** instantánea por alivio antiestrés.
 
@@ -94,7 +94,7 @@ Aproximadamente cada 2 minutos de juego activo, puede desencadenarse una emergen
 - 🚨 *¡Caída masiva de AWS US-EAST-1!*
 - 👔 *¡Visita sorpresa del CEO con consultores!*
 - ⏰ *Deploy a producción: Viernes 17:59.*
-- 👶 *El becario ejecutó un comando peligroso en el servidor.*
+- 👶 *El trainee ejecutó un comando peligroso en el servidor.*
 - ☕ *¡La cafetera central ha explotado!*
 - 📅 *Reunión de 2 horas sin agenda ni objetivos.*
 - ☣️ *Alerta de phishing y ransomware en el sector contable.*
@@ -233,6 +233,18 @@ npm run lint
 ---
 
 ## 📅 Historial de Versiones (Changelog)
+
+### [v1.5] - 2026
+- **Bloqueo Estricto de Aceleración en Burnout**: Si el jugador agota su Cordura (0%) y entra en estado de Burnout, queda totalmente deshabilitada la aceleración manual de tareas hasta que consuma café o descanse. El botón visual de aceleración pasa a estado deshabilitado con mensaje explicativo y sonido de error.
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.5`.
+
+### [v1.4] - 2026
+- **Unificación de Nomenclatura Profesional**: Reemplazadas todas las referencias a "becario" y "pasante" por la designación estándar de la industria IT "**trainee**" (en crisis de Murphy, tareas y descripciones).
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.4`.
+
+### [v1.3] - 2026
+- **Ajuste Tipográfico y Corrección de Textos Cortados**: Se eliminaron las restricciones de truncamiento (`truncate`, `line-clamp-1` y `line-clamp-2`) en las tarjetas de tareas activas y del catálogo disponible, permitiendo que las descripciones y títulos completos se lean fluidamente con salto de línea natural y espaciado relajado.
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.3`.
 
 ### [v1.2] - 2026
 - **Ajuste de Probabilidades en Crisis de Murphy**: Se redujeron y calibraron las probabilidades de éxito de las decisiones (anteriormente muy indulgentes entre 85%-100%), creando un balance más tenso, impredecible y con riesgo real de fallo.

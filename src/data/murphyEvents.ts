@@ -156,8 +156,8 @@ export const MURPHY_EVENTS: MurphyEvent[] = [
   },
   {
     id: 'intern-rm-rf',
-    title: '👶 EL BECARIO EJECUTÓ UN COMANDO PELIGROSO',
-    subtitle: 'Se escuchó un "oh oh..." desde el rincón de los pasantes.',
+    title: '👶 EL TRAINEE EJECUTÓ UN COMANDO PELIGROSO',
+    subtitle: 'Se escuchó un "oh oh..." desde el rincón de los trainees.',
     flavorText: 'Buscaba liberar espacio en disco y copió una línea de StackOverflow con permisos de root sin entenderla.',
     severity: 'high',
     choices: [
@@ -176,7 +176,7 @@ export const MURPHY_EVENTS: MurphyEvent[] = [
         }
       },
       {
-        text: '👨‍🏫 Calmar al becario, invitarle un café y enseñarle a usar Git',
+        text: '👨‍🏫 Calmar al trainee, invitarle un café y enseñarle a usar Git',
         description: 'Buen karma y liderazgo empático.',
         sanityDelta: 10,
         xpDelta: 280,
@@ -184,7 +184,7 @@ export const MURPHY_EVENTS: MurphyEvent[] = [
         scrapDelta: 5,
         successRate: 0.84,
         failureOutcome: {
-          text: 'El becario del susto derramó el café sobre el switch de escritorio y quemó la regleta.',
+          text: 'El trainee del susto derramó el café sobre el switch de escritorio y quemó la regleta.',
           sanityDelta: -15,
           salaryDelta: -30
         }

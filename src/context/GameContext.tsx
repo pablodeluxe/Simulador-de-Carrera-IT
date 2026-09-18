@@ -559,24 +559,26 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Click / Tap Active Task to accelerate (rushing causes mental exhaustion and consumes sanity)
   const clickActiveTask = useCallback(
     (taskId: string) => {
-      sound.playKeyClick();
-
       setState((prev) => {
+        // Players suffering from burnout cannot accelerate tasks
+        if (prev.isBurnout) {
+          sound.playErrorBuzz();
+          return prev;
+        }
+
         const taskIndex = prev.activeTasks.findIndex((t) => t.id === taskId);
         if (taskIndex === -1) return prev;
 
-        const effectiveClickPower = prev.isBurnout
-          ? Math.max(3, Math.round(clickPower * 0.35))
-          : clickPower;
+        sound.playKeyClick();
 
+        const effectiveClickPower = clickPower;
         const target = prev.activeTasks[taskIndex];
         const newProgress = target.progress + effectiveClickPower;
 
         // Rushing costs mental energy:
-        // Consumes sanity unless already in burnout (where sanity cannot drop below 0)
-        const sanityLost = prev.isBurnout ? 0 : clickSanityCost;
+        const sanityLost = clickSanityCost;
         const nextSanity = Math.max(0, Number((prev.sanity - sanityLost).toFixed(1)));
-        const isBurnoutNow = prev.isBurnout ? true : nextSanity <= 0;
+        const isBurnoutNow = nextSanity <= 0;
         let burnoutsCount = prev.stats.burnoutsSuffered;
 
         if (isBurnoutNow && !prev.isBurnout) {
