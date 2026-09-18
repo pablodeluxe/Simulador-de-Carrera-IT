@@ -499,9 +499,9 @@ export const MURPHY_EVENTS: MurphyEvent[] = [
   },
   {
     id: 'license-audit-surprise',
-    title: '⚡ AUDITORÍA DE LICENCIAS DE SOFTWARE SIN AVISO',
-    subtitle: 'Dos inspectores de la BSA tocan la puerta con portafolios y planillas Excel.',
-    flavorText: 'Alguien instaló WinRAR hace 1200 días sin pagar la licencia, además de 5 copias piratas de Photoshop en diseño gráfico.',
+    title: '⚡ INSPECCIÓN DE LICENCIAS DE MICROSOFT SIN AVISO',
+    subtitle: 'Dos inspectores de Microsoft tocan la puerta con portafolios y planillas Excel.',
+    flavorText: 'Reclaman una auditoría exhaustiva de licencias CAL de Windows Server, SQL Server y copias de Office sin activar.',
     severity: 'medium',
     choices: [
       {

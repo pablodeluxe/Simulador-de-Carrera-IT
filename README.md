@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6.svg?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8.svg?logo=tailwindcss)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646cff.svg?logo=vite)](https://vitejs.dev/)
-[![Version](https://img.shields.io/badge/version-v1.5-cyan.svg)](#)
+[![Version](https://img.shields.io/badge/version-v1.6-cyan.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 
 > Un juego interactivo de simulación, estrategia e **Idle RPG** donde comienzas como un humilde Técnico de Soporte L1 y escalas en la jerarquía corporativa tecnológica hasta convertirte en CTO & Leyenda del Silicio. Sobrevive a tareas críticas, gestiona tu cordura a base de café y sortea las implacables crisis de la **Ley de Murphy**.
@@ -101,7 +101,7 @@ Aproximadamente cada 2 minutos de juego activo, puede desencadenarse una emergen
 - 🧯 **[NUEVO]** *¡Incendio en el rack de baterías (UPS)!*
 - 💣 **[NUEVO]** *Certificado SSL wildcard expirado en producción.*
 - 🤖 **[NUEVO]** *La IA alucinó y borró la tabla de usuarios.*
-- ⚡ **[NUEVO]** *Auditoría sorpresa de licencias de software por la BSA.*
+- ⚡ **[NUEVO]** *Inspección sorpresa de licencias de software de Microsoft.*
 - 🌧️ **[NUEVO]** *Filtración de agua del aire acondicionado sobre el switch central.*
 
 #### ⚖️ Rebalanceo de Probabilidades y Riesgo Táctico:
@@ -233,6 +233,10 @@ npm run lint
 ---
 
 ## 📅 Historial de Versiones (Changelog)
+
+### [v1.6] - 2026
+- **Ajuste de Evento de Crisis a Inspección de Microsoft**: Se adaptó el evento de auditoría de licencias de software para reflejar una inspección directa de inspectores de Microsoft (revisión de licencias CAL de Windows Server, SQL Server y puestos de Office), manteniendo la hilarante defensa con software libre GNU/Linux.
+- **Incremento de Versión**: Proyecto y dependencias actualizados a `v1.6`.
 
 ### [v1.5] - 2026
 - **Bloqueo Estricto de Aceleración en Burnout**: Si el jugador agota su Cordura (0%) y entra en estado de Burnout, queda totalmente deshabilitada la aceleración manual de tareas hasta que consuma café o descanse. El botón visual de aceleración pasa a estado deshabilitado con mensaje explicativo y sonido de error.
